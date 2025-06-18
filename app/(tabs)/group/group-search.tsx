@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const mockGroups = [
   {
@@ -47,10 +48,17 @@ const GroupSearchScreen: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={["top"]}>
       {/* 상단 검색바 */}
       <View style={styles.searchBar}>
-        <TouchableOpacity onPress={() => router.push("/group/group-add")}>
+        <TouchableOpacity
+          onPress={() =>
+            router.push({
+              pathname: "/group/group-add",
+              params: { from: "search" },
+            })
+          }
+        >
           <Ionicons name="chevron-back" size={24} />
         </TouchableOpacity>
         <TextInput
@@ -132,7 +140,7 @@ const GroupSearchScreen: React.FC = () => {
           </View>
         </View>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -144,7 +152,6 @@ const styles = StyleSheet.create({
   searchBar: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 60,
     marginBottom: 20,
     width: "90%",
     left: "5%",

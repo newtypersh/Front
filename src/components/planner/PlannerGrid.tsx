@@ -26,7 +26,7 @@ const PlannerGrid = () => {
           headers: { Accept: "application/json" },
         });
         setWeekly(res.data.success?.schedules || {});
-        console.log(res.data);
+        console.log(res.data.success?.schedules);
       } catch (e) {
         setWeekly({});
       } finally {
@@ -75,7 +75,7 @@ const PlannerGrid = () => {
                     <View
                       style={[
                         styles.eventBlock,
-                        { top, left, height, position: "absolute" },
+                        { top, left, height, position: "absolute", zIndex: 2 },
                       ]}
                     >
                       <Text style={styles.eventText}>{item.title}</Text>
@@ -89,12 +89,16 @@ const PlannerGrid = () => {
         {/* 그리드 라인 */}
         {[...Array(23)].map((_, row) => (
           <React.Fragment key={row}>
-            <View style={[styles.gridRow, { top: HOUR_HEIGHT * row }]} />
+            <View
+              style={[styles.gridRow, { top: HOUR_HEIGHT * row, zIndex: 1 }]}
+            />
           </React.Fragment>
         ))}
         {[...Array(7)].map((_, col) => (
           <React.Fragment key={col}>
-            <View style={[styles.gridCol, { left: DAY_WIDTH * col }]} />
+            <View
+              style={[styles.gridCol, { left: DAY_WIDTH * col, zIndex: 1 }]}
+            />
           </React.Fragment>
         ))}
       </View>

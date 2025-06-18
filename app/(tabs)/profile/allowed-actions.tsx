@@ -11,6 +11,7 @@ import {
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const AllowedActionsScreen: React.FC = () => {
   const router = useRouter();
@@ -86,7 +87,7 @@ const AllowedActionsScreen: React.FC = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {/* 상단 바 */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.push("/profile")}>
@@ -109,7 +110,7 @@ const AllowedActionsScreen: React.FC = () => {
           </React.Fragment>
         ))}
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -122,7 +123,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingTop: 60,
     paddingBottom: 20,
     width: "90%",
     left: "5%",

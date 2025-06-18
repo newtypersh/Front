@@ -1,16 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useRouter } from "expo-router";
+import { useRouter, Stack } from "expo-router";
 import Fab from "../../../src/components/common/Fab";
 import axios from "axios";
 
 const GroupScreen: React.FC = () => {
   const router = useRouter();
 
-  const [groups, setGroups] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  // 임시 더미 데이터
+  const [groups, setGroups] = useState<any[]>([
+    { id: 1, name: "📚 갓생스터디", members: 3 },
+  ]);
+  const [loading, setLoading] = useState(false);
 
+  /*
   useEffect(() => {
     const fetchGroups = async () => {
       try {
@@ -34,25 +44,31 @@ const GroupScreen: React.FC = () => {
     };
     fetchGroups();
   }, []);
+  */
 
   return (
-    <SafeAreaView style={styles.container} edges={["top"]}>
-      <Text style={styles.title}>내 그룹</Text>
-      <FlatList
-        style={styles.list}
-        data={groups}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.card}>
-            <Text style={styles.groupName}>{item.name}</Text>
-            <Text style={styles.memberCount}>인원 {item.members}명</Text>
-          </View>
-        )}
-        showsVerticalScrollIndicator={false}
-        ListEmptyComponent={loading ? null : <Text>그룹이 없습니다.</Text>}
-      />
-      <Fab iconName="add" onPress={() => router.push("/group/group-add")} />
-    </SafeAreaView>
+    <>
+      <Stack.Screen options={{ animation: "slide_from_left" }} />
+      <SafeAreaView style={styles.container} edges={["top"]}>
+        <Text style={styles.title}>내 그룹</Text>
+        <FlatList
+          style={styles.list}
+          data={groups}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={() => router.push(`/group/${item.id}`)}>
+              <View style={styles.card}>
+                <Text style={styles.groupName}>{item.name}</Text>
+                <Text style={styles.memberCount}>인원 {item.members}명</Text>
+              </View>
+            </TouchableOpacity>
+          )}
+          showsVerticalScrollIndicator={false}
+          ListEmptyComponent={loading ? null : <Text>그룹이 없습니다.</Text>}
+        />
+        <Fab iconName="add" onPress={() => router.push("/group/group-add")} />
+      </SafeAreaView>
+    </>
   );
 };
 

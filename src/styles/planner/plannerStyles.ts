@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff", paddingTop: 60 },
+  container: { flex: 1, backgroundColor: "#fff" },
   monthHeader: {
     flexDirection: "row",
     alignItems: "center",

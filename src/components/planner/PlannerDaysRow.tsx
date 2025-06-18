@@ -7,6 +7,7 @@ interface PlannerDaysRowProps {
 }
 
 const days = ["일", "월", "화", "수", "목", "금", "토"];
+const todayIdx = new Date().getDay();
 
 const PlannerDaysRow: React.FC<PlannerDaysRowProps> = ({
   dates,
@@ -19,7 +20,7 @@ const PlannerDaysRow: React.FC<PlannerDaysRowProps> = ({
         <React.Fragment key={idx}>
           <View style={styles.dayCol}>
             <Text style={styles.dayText}>{days[idx]}</Text>
-            <Text style={idx === 2 ? styles.todayText : styles.dateText}>
+            <Text style={idx === todayIdx ? styles.todayText : styles.dateText}>
               {date}
             </Text>
           </View>

@@ -12,6 +12,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import axios from "axios";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
 
@@ -37,11 +38,17 @@ const GroupCreateScreen: React.FC = () => {
     }
   };
 
+  const handleFabPress = () => {
+    if (isEdit) {
+      setIsEdit(false);
+      router.push({ pathname: "/group/group-add", params: { from: "create" } });
+    } else {
+      setIsEdit(true);
+    }
+  };
+
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-    >
+    <SafeAreaView style={styles.container} edges={["top"]}>
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps="handled"
@@ -49,7 +56,14 @@ const GroupCreateScreen: React.FC = () => {
         <View style={styles.container}>
           {/* 헤더 */}
           <View style={styles.header}>
-            <TouchableOpacity onPress={() => router.push("/group/group-add")}>
+            <TouchableOpacity
+              onPress={() =>
+                router.push({
+                  pathname: "/group/group-add",
+                  params: { from: "create" },
+                })
+              }
+            >
               <Ionicons name="chevron-back" size={24} />
             </TouchableOpacity>
           </View>
@@ -85,7 +99,7 @@ const GroupCreateScreen: React.FC = () => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
@@ -93,7 +107,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    paddingTop: 60,
   },
   header: {
     flexDirection: "row",

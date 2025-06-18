@@ -1,13 +1,21 @@
-import React from "react";
+import * as React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
 interface TimeChartProps {
-  data: { label: string; values: number[] }[];
+  data: { label: string; values: number[]; target?: string }[];
   deviceColors: string[];
   yLabels?: string[];
   height?: number;
   barWidth?: number;
+  maxMinute?: number;
 }
+
+// 매체별 색상 매핑
+const targetColorMap: { [key: string]: string } = {
+  "책 읽기": "#0000FF",
+  "PC 보기": "#66FFFF",
+  핸드폰: "#FFBF01",
+};
 
 const chunkArray = (arr: any[], size: number) =>
   Array.from({ length: Math.ceil(arr.length / size) }, (_, i) =>
@@ -20,19 +28,15 @@ const StatisticsTimeChart: React.FC<TimeChartProps> = ({
   yLabels = ["60분", "30분", "0"],
   height = 60,
   barWidth = 16,
-}: {
-  data: { label: string; values: number[] }[];
-  deviceColors: string[];
-  yLabels?: string[];
-  height?: number;
-  barWidth?: number;
-}) => {
-  // 최대값(분 단위) 기준. 예시로 1.5시간(90분) 기준
-  const maxMinute = 1.5;
+  maxMinute,
+}: TimeChartProps) => {
+  // 최대값(분 단위) 기준. 동적으로 계산
+  const dynamicMax =
+    maxMinute ||
+    Math.max(1, ...data.map((d) => d.values.reduce((a, b) => a + b, 0)));
 
   const showLabels = ["오전 12시", "오전 6시", "오후 12시", "오후 6시"];
   const groupedData = chunkArray(data, 6);
-
   return (
     <>
       <View style={styles.row}>
@@ -41,20 +45,26 @@ const StatisticsTimeChart: React.FC<TimeChartProps> = ({
             <View style={styles.barLabel}>
               <View style={styles.barGroup}>
                 {group.map((item, idx) => (
-                  <View key={item.label || idx} style={styles.col}>
-                    <View style={[styles.barBg, { height, width: barWidth }]}>
-                      {item.values.map((v: number, i: number) => (
-                        <View
-                          key={i}
-                          style={{
-                            height: (v / maxMinute) * height,
-                            backgroundColor: deviceColors[i],
-                            width: barWidth,
-                          }}
-                        />
-                      ))}
+                  <React.Fragment key={item.label || idx}>
+                    <View style={styles.col}>
+                      <View style={[styles.barBg, { height, width: barWidth }]}>
+                        {item.values.map((v: number, i: number) => (
+                          <React.Fragment key={i}>
+                            <View
+                              style={{
+                                height: (v / dynamicMax) * height,
+                                backgroundColor:
+                                  targetColorMap[item.target || ""] ||
+                                  (deviceColors && deviceColors[i]) ||
+                                  "#FF0000",
+                                width: barWidth,
+                              }}
+                            />
+                          </React.Fragment>
+                        ))}
+                      </View>
                     </View>
-                  </View>
+                  </React.Fragment>
                 ))}
               </View>
               <Text style={styles.showLabel}>{showLabels[groupIdx]}</Text>
@@ -63,10 +73,10 @@ const StatisticsTimeChart: React.FC<TimeChartProps> = ({
         ))}
         {/* y축 라벨 */}
         <View style={[styles.yAxis, { height: height }]}>
-          {yLabels.map((l) => (
-            <Text key={l} style={styles.yLabel}>
-              {l}
-            </Text>
+          {yLabels.map((l, i) => (
+            <React.Fragment key={i}>
+              <Text style={styles.yLabel}>{l}</Text>
+            </React.Fragment>
           ))}
         </View>
       </View>
@@ -85,7 +95,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 2,
   },
   barBg: {
-    backgroundColor: "#e0e0e0",
     justifyContent: "flex-end",
     marginBottom: 2,
     overflow: "hidden",

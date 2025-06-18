@@ -1,4 +1,4 @@
-import { Slot, useRouter, useSegments } from "expo-router";
+import { Slot, useRouter, useSegments, Stack } from "expo-router";
 import { useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
 import { ActivityIndicator, View, Platform } from "react-native";
@@ -40,5 +40,12 @@ export default function RootLayout() {
     );
   }
 
-  return <Slot />;
+  return (
+    <Stack
+      screenOptions={{
+        animation: "slide_from_right", // 오른쪽 -> 왼쪽 슬라이드 애니메이션
+        headerShown: false, // 상단 헤더 숨김
+      }}
+    />
+  );
 }

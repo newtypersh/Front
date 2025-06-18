@@ -6,6 +6,7 @@ import PlannerGrid from "../src/components/planner/PlannerGrid";
 import Fab from "../src/components/common/Fab";
 import PlannerEventModal from "../src/components/planner/PlannerEventModal";
 import styles from "../src/styles/planner/plannerStyles";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const today = new Date();
 const todayStr = today.toISOString().slice(0, 10);
@@ -51,7 +52,7 @@ const PlannerScreen: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={["top"]}>
       <PlannerHeader
         month={today.getMonth() + 1}
         showCalendar={showCalendar}
@@ -77,7 +78,7 @@ const PlannerScreen: React.FC = () => {
         onDatePickerClose={() => setIsDatePickerVisible(false)}
         onDaySelect={handleDaySelect}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 

@@ -23,7 +23,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "newArchEnabled": true
+      "newArchEnabled": true,
+      "package": "com.newtypersh.aistudylens"
     },
     "web": {
       "favicon": "./assets/favicon.png"

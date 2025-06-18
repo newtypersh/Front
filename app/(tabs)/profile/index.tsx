@@ -1,16 +1,10 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Modal,
-  Platform,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Modal } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import axios from "axios";
+import { Stack } from "expo-router";
 
 const ProfileScreen: React.FC = () => {
   const router = useRouter();
@@ -29,42 +23,45 @@ const ProfileScreen: React.FC = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={["top"]}>
-      <Text style={styles.title}>설정</Text>
-      <View style={styles.menuList}>
-        <TouchableOpacity onPress={() => router.push("/profile/edit")}>
-          <Text style={styles.menuItem}>프로필 수정</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => router.push("/profile/allowed-actions")}
+    <>
+      <Stack.Screen options={{ animation: "slide_from_left" }} />
+      <SafeAreaView style={styles.container} edges={["top"]}>
+        <Text style={styles.title}>설정</Text>
+        <View style={styles.menuList}>
+          <TouchableOpacity onPress={() => router.push("/profile/edit")}>
+            <Text style={styles.menuItem}>프로필 수정</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => router.push("/profile/allowed-actions")}
+          >
+            <Text style={styles.menuItem}>허용할 동작</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setModalVisible(true)}>
+            <Text style={styles.menuItem}>로그아웃</Text>
+          </TouchableOpacity>
+        </View>
+        <Modal
+          visible={modalVisible}
+          transparent
+          animationType="fade"
+          onRequestClose={() => setModalVisible(false)}
         >
-          <Text style={styles.menuItem}>허용할 동작</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setModalVisible(true)}>
-          <Text style={styles.menuItem}>로그아웃</Text>
-        </TouchableOpacity>
-      </View>
-      <Modal
-        visible={modalVisible}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalText}>로그아웃 하시겠습니까?</Text>
-            <View style={styles.modalButtonRow}>
-              <TouchableOpacity onPress={handleLogout}>
-                <Text style={styles.confirmText}>확인</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => setModalVisible(false)}>
-                <Text style={styles.cancelText}>취소</Text>
-              </TouchableOpacity>
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalText}>로그아웃 하시겠습니까?</Text>
+              <View style={styles.modalButtonRow}>
+                <TouchableOpacity onPress={handleLogout}>
+                  <Text style={styles.confirmText}>확인</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setModalVisible(false)}>
+                  <Text style={styles.cancelText}>취소</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
-      </Modal>
-    </SafeAreaView>
+        </Modal>
+      </SafeAreaView>
+    </>
   );
 };
 
